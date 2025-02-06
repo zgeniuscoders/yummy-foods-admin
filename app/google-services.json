@@ -1,0 +1,76 @@
+{
+  "project_info": {
+    "project_number": "4466637728",
+    "project_id": "yummy-foods-ee7c0",
+    "storage_bucket": "yummy-foods-ee7c0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:4466637728:android:03be65891797ac780ec2c5",
+        "android_client_info": {
+          "package_name": "cd.zgeniuscoders.yummyfoods"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "4466637728-p4gcsi48qa6pbmmtb0ropr59a08hnpaa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cd.zgeniuscoders.yummyfoods",
+            "certificate_hash": "9ea0e0b0e1d7c2adca569a38abaf8e9849d6b718"
+          }
+        },
+        {
+          "client_id": "4466637728-0kdu64c7eqn2r3nmjts1nhai80g326m2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHa98RrmCEcV86737ufaAMfwFbichR1ac"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "4466637728-0kdu64c7eqn2r3nmjts1nhai80g326m2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:4466637728:android:18f67efc4cd12f630ec2c5",
+        "android_client_info": {
+          "package_name": "cd.zgeniuscoders.yummyfoodsadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "4466637728-0kdu64c7eqn2r3nmjts1nhai80g326m2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHa98RrmCEcV86737ufaAMfwFbichR1ac"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "4466637728-0kdu64c7eqn2r3nmjts1nhai80g326m2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
