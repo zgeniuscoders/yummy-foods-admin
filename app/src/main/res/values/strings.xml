@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Yummy Foods Admin</string>
+    <string name="cant_retrieve_customers">Impossible de recuperer le client veuillez reeseyer plustard</string>
+    <string name="error_retrieve_orders">Une erreur inatendu se produite lors de la recuperation de commandes</string>
 </resources>
