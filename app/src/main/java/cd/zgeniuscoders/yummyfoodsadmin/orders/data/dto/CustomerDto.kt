@@ -18,11 +18,11 @@ data class CustomerCountDto(
 @Serializable
 data class CustomerDtoData(
     @SerialName("user_id")
-    val userId: String,
+    val userId: String = "",
     @SerialName("username")
-    val username: String,
+    val username: String = "",
     @SerialName("profile_picture_url")
-    val profilePictureUrl: String?,
+    val profilePictureUrl: String? = null,
     @SerialName("email")
-    val email: String,
+    val email: String = "",
 )

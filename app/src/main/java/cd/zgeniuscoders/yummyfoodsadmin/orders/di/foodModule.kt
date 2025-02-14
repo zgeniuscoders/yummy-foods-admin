@@ -4,8 +4,10 @@ import cd.zgeniuscoders.yummyfoodsadmin.orders.data.repository.CustomerRepositor
 import cd.zgeniuscoders.yummyfoodsadmin.orders.data.repository.OrderRepositoryImpl
 import cd.zgeniuscoders.yummyfoodsadmin.orders.domain.repository.CustomerRepository
 import cd.zgeniuscoders.yummyfoodsadmin.orders.domain.repository.OrderRepository
+import cd.zgeniuscoders.yummyfoodsadmin.orders.presentation.home.HomeViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 
 val foodModule = module {
@@ -27,5 +29,6 @@ val foodModule = module {
         CustomerRepositoryImpl(get(), context)
     }
 
+    viewModelOf(::HomeViewModel)
 
 }

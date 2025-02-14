@@ -2,4 +2,14 @@
     <string name="app_name">Yummy Foods Admin</string>
     <string name="cant_retrieve_customers">Impossible de recuperer le client veuillez reeseyer plustard</string>
     <string name="error_retrieve_orders">Une erreur inatendu se produite lors de la recuperation de commandes</string>
+    <string name="order_instant">Instantané</string>
+    <string name="order_program">Programmer</string>
+    <string name="lieu">Lieux : %1$s</string>
+    <string name="order_type">Type commande : %1$s</string>
+    <string name="order_price">Prix totale : %1$s</string>
+    <string name="order_qty">Quantité</string>
+    <string name="order_text_btn">Commander</string>
+    <string name="shipped_instant">Livraison instantané</string>
+    <string name="phone_number">Numero de telephone</string>
+    <string name="university">Université</string>
 </resources>

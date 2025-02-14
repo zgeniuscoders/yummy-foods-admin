@@ -4,6 +4,7 @@ import android.content.Context
 import cd.zgeniuscoders.yummyfoods.food.data.dto.OrderDtoData
 import cd.zgeniuscoders.yummyfoods.food.data.dto.OrdersDto
 import cd.zgeniuscoders.yummyfoodsadmin.R
+import cd.zgeniuscoders.yummyfoodsadmin.orders.data.dto.CustomerDtoData
 import cd.zgeniuscoders.yummyfoodsadmin.orders.domain.repository.OrderRepository
 import cd.zgeniuscoders.yummyfoodsadmin.util.Resource
 import com.google.firebase.firestore.FirebaseFirestore
@@ -93,8 +94,6 @@ class OrderRepositoryImpl(
         try {
 
             collection
-                .document()
-                .collection("orders")
                 .addSnapshotListener { value, error ->
 
                     if (error != null) {
@@ -103,14 +102,52 @@ class OrderRepositoryImpl(
                     }
 
                     if (value != null) {
-                        val data = value.toObjects(OrderDtoData::class.java)
-                        trySend(
-                            Resource.Success(
-                                data = OrdersDto(
-                                    data
-                                )
-                            )
-                        )
+
+                        val customers = value.toObjects(CustomerDtoData::class.java)
+
+                        for (customer in customers) {
+
+                            val ordersList: MutableList<OrderDtoData> = mutableListOf()
+
+
+                            val orderCollection = collection
+                                .document(customer.userId)
+                                .collection("orders")
+
+                            orderCollection
+                                .whereEqualTo("orderStatus", "en attente")
+                                .addSnapshotListener { orderCollectionValue, orderCollectionerror ->
+
+                                    if (orderCollectionerror != null) {
+                                        orderCollectionerror.printStackTrace()
+                                        throw Exception(context.getString(R.string.error_retrieve_orders))
+                                    }
+
+                                    if (orderCollectionValue != null) {
+                                        val orders =
+                                            orderCollectionValue.toObjects(OrderDtoData::class.java)
+                                        for (order in orders) {
+                                            if (order != null) {
+                                                ordersList.add(order)
+                                            }
+                                        }
+
+                                        trySend(
+                                            Resource.Success(
+                                                data = OrdersDto(
+                                                    ordersList
+                                                )
+                                            )
+                                        )
+                                    }
+
+                                }
+
+
+                        }
+
+
+
                     }
 
                 }
