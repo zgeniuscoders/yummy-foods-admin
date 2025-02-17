@@ -1,6 +1,7 @@
 package cd.zgeniuscoders.yummyfoodsadmin.orders.data.repository
 
 import android.content.Context
+import android.util.Log
 import cd.zgeniuscoders.yummyfoods.food.data.dto.OrderDtoData
 import cd.zgeniuscoders.yummyfoods.food.data.dto.OrdersDto
 import cd.zgeniuscoders.yummyfoodsadmin.R
@@ -20,17 +21,15 @@ class OrderRepositoryImpl(
 
     private val collection = db.collection("users")
 
-    override suspend fun cancelOrder(orderId: String): Flow<Resource<Boolean>> = callbackFlow {
+    override suspend fun cancelOrder(orderId: String, userId: String): Flow<Resource<Boolean>> =
+        callbackFlow {
         try {
 
-            val data = hashMapOf<String, String>()
-            data["orderStatus"] = "annuler"
-
             collection
-                .document()
+                .document(userId)
                 .collection("orders")
                 .document(orderId)
-                .set(data)
+                .update("orderStatus", "annuler")
 
             trySend(
                 Resource.Success(
@@ -55,17 +54,15 @@ class OrderRepositoryImpl(
         awaitClose()
     }
 
-    override suspend fun markAsDelivered(orderId: String): Flow<Resource<Boolean>> = callbackFlow {
+    override suspend fun markAsDelivered(orderId: String, userId: String): Flow<Resource<Boolean>> =
+        callbackFlow {
         try {
 
-            val data = hashMapOf<String, String>()
-            data["orderStatus"] = "livrer"
-
             collection
-                .document()
+                .document(userId)
                 .collection("orders")
                 .document(orderId)
-                .set(data)
+                .update("orderStatus", "livrer")
 
             trySend(
                 Resource.Success(
@@ -108,7 +105,6 @@ class OrderRepositoryImpl(
                         for (customer in customers) {
 
                             val ordersList: MutableList<OrderDtoData> = mutableListOf()
-
 
                             val orderCollection = collection
                                 .document(customer.userId)

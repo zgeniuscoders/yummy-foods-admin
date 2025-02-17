@@ -5,17 +5,23 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -48,6 +54,8 @@ fun HomePage(
     val vm = koinViewModel<HomeViewModel>()
     val state by vm.state.collectAsStateWithLifecycle()
 
+    val onEvent = vm::onTriggerEvent
+
     LaunchedEffect(state.flashMessage) {
         if (state.flashMessage.isNotBlank()) {
             snackbarHostState.showSnackbar(state.flashMessage)
@@ -57,13 +65,18 @@ fun HomePage(
     HomeBody(
         navHostController,
         state,
+        onEvent
     )
 
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun HomeBody(navHostController: NavHostController, state: HomeState) {
+fun HomeBody(
+    navHostController: NavHostController,
+    state: HomeState,
+    onEvent: (event: HomeEvent) -> Unit
+) {
     LazyColumn(
         modifier = Modifier.padding(10.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
@@ -92,11 +105,12 @@ fun HomeBody(navHostController: NavHostController, state: HomeState) {
                     isOrderDetailOpen = !isOrderDetailOpen
                 }
             ) {
-                FlowRow(
+
+
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(10.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     Card(
@@ -110,29 +124,62 @@ fun HomeBody(navHostController: NavHostController, state: HomeState) {
                         )
                     }
 
-                    Column {
-                        Text(
-                            text = order.recipeName,
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Medium
-                        )
-                        Text(order.orderStatus, color = MaterialTheme.colorScheme.secondary)
-                        Text(
-                            stringResource(R.string.order_qty) + " : ${order.qty}",
-                            color = MaterialTheme.colorScheme.secondary
-                        )
+                    FlowRow(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+
+                        Column {
+                            Text(
+                                text = order.recipeName,
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = FontWeight.Medium
+                            )
+                            Text(order.orderStatus, color = MaterialTheme.colorScheme.secondary)
+                            Text(
+                                stringResource(R.string.order_qty) + " : ${order.qty}",
+                                color = MaterialTheme.colorScheme.secondary
+                            )
+                        }
+                        Row {
+                            IconButton(
+                                modifier = Modifier.size(40.dp),
+                                colors = IconButtonDefaults.iconButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.error
+                                ),
+                                onClick = {
+                                    onEvent(HomeEvent.OnOrderMarkAsCanceled(order.id, order.userId))
+                                }
+                            ) {
+                                Icon(
+                                    Icons.Rounded.Clear,
+                                    contentDescription = "mark order as canceled button"
+                                )
+                            }
+                            IconButton(
+                                modifier = Modifier.size(40.dp),
+                                colors = IconButtonDefaults.iconButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.primary
+                                ),
+                                onClick = {
+                                    onEvent(HomeEvent.OnOrderMarkAsDelivered(order.id, order.userId))
+                                }
+                            ) {
+                                Icon(
+                                    Icons.Rounded.Check,
+                                    contentDescription = "mark order as delivered button"
+                                )
+                            }
+                        }
                     }
 
-                    Spacer(modifier = Modifier.weight(1f))
+                }
 
-                    Text(
-                        text = "${order.recipePrice}$",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Medium
-                    )
-
-                    if (isOrderDetailOpen) {
-                        Column {
+                if (isOrderDetailOpen) {
+                    Column(
+                        modifier = Modifier.padding(10.dp)
+                    ) {
                             Text(stringResource(R.string.lieu, order.university))
                             Text(
                                 stringResource(
@@ -151,7 +198,6 @@ fun HomeBody(navHostController: NavHostController, state: HomeState) {
                         }
                     }
 
-                }
             }
 
         }
@@ -162,13 +208,16 @@ fun HomeBody(navHostController: NavHostController, state: HomeState) {
 @Composable
 fun HomePagePreview(modifier: Modifier = Modifier) {
     YummyFoodsAdminTheme {
-        Scaffold { innerP ->
-            HomeBody(
-                rememberNavController(),
-                HomeState(
-                    orders = (1..12).map { order }
+        Surface {
+            Scaffold { innerP ->
+                HomeBody(
+                    rememberNavController(),
+                    HomeState(
+                        orders = (1..12).map { order }
+                    ),
+                    onEvent = {}
                 )
-            )
+            }
         }
     }
 }

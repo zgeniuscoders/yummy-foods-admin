@@ -1,6 +1,5 @@
 package cd.zgeniuscoders.yummyfoodsadmin.orders.presentation.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cd.zgeniuscoders.yummyfoodsadmin.orders.data.mappers.toOrderList
@@ -31,6 +30,66 @@ class HomeViewModel(
             _state.value
         )
 
+    fun onTriggerEvent(event: HomeEvent) {
+        when (event) {
+            is HomeEvent.OnOrderMarkAsCanceled -> markOrderAsDelivered(event.orderId, event.userId)
+            is HomeEvent.OnOrderMarkAsDelivered -> markOrderAsCanceled(event.orderId, event.userId)
+        }
+    }
+
+    private fun markOrderAsCanceled(orderId: String, userId: String) {
+        viewModelScope.launch {
+
+            _state.update {
+                it.copy(flashMessage = "")
+            }
+
+            orderRepository
+                .cancelOrder(orderId, userId)
+                .onEach { res ->
+                    when (res) {
+                        is Resource.Error -> {
+                            _state.update {
+                                it.copy(flashMessage = res.message.toString())
+                            }
+                        }
+
+                        is Resource.Success -> {
+                            _state.update {
+                                it.copy(flashMessage = "Success")
+                            }
+                        }
+                    }
+                }.launchIn(viewModelScope)
+        }
+    }
+
+    private fun markOrderAsDelivered(orderId: String, userId: String) {
+        viewModelScope.launch {
+
+            _state.update {
+                it.copy(flashMessage = "")
+            }
+
+            orderRepository
+                .markAsDelivered(orderId, userId)
+                .onEach { res ->
+                    when (res) {
+                        is Resource.Error -> {
+                            _state.update {
+                                it.copy(flashMessage = res.message.toString())
+                            }
+                        }
+
+                        is Resource.Success -> {
+                            _state.update {
+                                it.copy(flashMessage = "Success")
+                            }
+                        }
+                    }
+                }.launchIn(viewModelScope)
+        }
+    }
 
     private fun getOrders() {
         viewModelScope.launch {

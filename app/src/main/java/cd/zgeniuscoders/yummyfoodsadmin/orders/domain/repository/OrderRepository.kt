@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface OrderRepository {
 
-    suspend fun cancelOrder(orderId: String): Flow<Resource<Boolean>>
+    suspend fun cancelOrder(orderId: String, userId: String): Flow<Resource<Boolean>>
 
-    suspend fun markAsDelivered(orderId: String): Flow<Resource<Boolean>>
+    suspend fun markAsDelivered(orderId: String, userId: String): Flow<Resource<Boolean>>
 
     suspend fun getOrders(): Flow<Resource<OrdersDto>>
 }
