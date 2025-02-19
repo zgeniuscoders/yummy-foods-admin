@@ -7,6 +7,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface RecipeRepository {
 
+    suspend fun deleteRecipe(recipeId: String): Flow<Resource<Boolean>>
+
     suspend fun getRecipes(): Flow<Resource<RecipesDto>>
 
     suspend fun getDrinks(): Flow<Resource<RecipesDto>>
