@@ -9,39 +9,11 @@ sealed interface Routes {
     data object MainPagesNavGraph: Routes
 
     @Serializable
-    data object ProfileNavGraph : Routes
+    data object HomePage:Routes
 
     @Serializable
-    data object Profile : Routes
+    data object OrderPage: Routes
 
     @Serializable
-    data object FavoriteFood : Routes
-
-    @Serializable
-    data object AllOrder : Routes
-
-    @Serializable
-    data object Login : Routes
-
-    @Serializable
-    data object Logout : Routes
-
-    @Serializable
-    data object Home : Routes
-
-    @Serializable
-    data object OrderPage : Routes
-
-    @Serializable
-    data object Settings : Routes
-
-    @Serializable
-    data object Search : Routes
-
-    @Serializable
-    data class Detail(
-        val id: String
-    ) : Routes
-
-
+    data object RecipePage: Routes
 }

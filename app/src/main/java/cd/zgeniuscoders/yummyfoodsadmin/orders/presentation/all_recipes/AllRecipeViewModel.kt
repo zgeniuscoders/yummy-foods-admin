@@ -2,6 +2,7 @@ package cd.zgeniuscoders.yummyfoodsadmin.orders.presentation.all_recipes
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cd.zgeniuscoders.yummyfoodsadmin.orders.data.mappers.toRecipeList
 import cd.zgeniuscoders.yummyfoodsadmin.orders.domain.repository.RecipeRepository
 import cd.zgeniuscoders.yummyfoodsadmin.util.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -49,7 +50,8 @@ class AllRecipeViewModel(
                         }
 
                         is Resource.Success -> {
-
+                            val recipes = res.data?.toRecipeList()
+                            _state.update { it.copy(recipes = recipes ?: emptyList()) }
                         }
                     }
                 }.launchIn(viewModelScope)

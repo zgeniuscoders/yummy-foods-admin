@@ -4,4 +4,5 @@ sealed interface AllRecipeEvent {
 
     data class OnDeleteRecipe(val recipeId: String): AllRecipeEvent
 
+
 }
