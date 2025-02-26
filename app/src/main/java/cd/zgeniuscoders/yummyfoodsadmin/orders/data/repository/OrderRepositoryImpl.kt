@@ -1,7 +1,6 @@
 package cd.zgeniuscoders.yummyfoodsadmin.orders.data.repository
 
 import android.content.Context
-import android.util.Log
 import cd.zgeniuscoders.yummyfoods.food.data.dto.OrderDtoData
 import cd.zgeniuscoders.yummyfoods.food.data.dto.OrdersDto
 import cd.zgeniuscoders.yummyfoodsadmin.R
@@ -90,8 +89,9 @@ class OrderRepositoryImpl(
     override suspend fun getOrders(): Flow<Resource<OrdersDto>> = callbackFlow {
         try {
 
-            collection
-                .addSnapshotListener { value, error ->
+            val ordersList: MutableList<OrderDtoData> = mutableListOf()
+
+            collection.addSnapshotListener { value, error ->
 
                     if (error != null) {
                         error.printStackTrace()
@@ -103,8 +103,6 @@ class OrderRepositoryImpl(
                         val customers = value.toObjects(CustomerDtoData::class.java)
 
                         for (customer in customers) {
-
-                            val ordersList: MutableList<OrderDtoData> = mutableListOf()
 
                             val orderCollection = collection
                                 .document(customer.userId)
@@ -122,6 +120,7 @@ class OrderRepositoryImpl(
                                     if (orderCollectionValue != null) {
                                         val orders =
                                             orderCollectionValue.toObjects(OrderDtoData::class.java)
+
                                         for (order in orders) {
                                             if (order != null) {
                                                 ordersList.add(order)
@@ -135,14 +134,13 @@ class OrderRepositoryImpl(
                                                 )
                                             )
                                         )
+
                                     }
 
                                 }
 
 
                         }
-
-
 
                     }
 

@@ -1,5 +1,6 @@
 package cd.zgeniuscoders.yummyfoodsadmin.orders.presentation.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cd.zgeniuscoders.yummyfoodsadmin.orders.data.mappers.toOrderList
@@ -110,8 +111,9 @@ class HomeViewModel(
                         }
 
                         is Resource.Success -> {
+                            val orders = res.data?.toOrderList()
                             _state.update {
-                                it.copy(orders = res.data!!.toOrderList())
+                                it.copy(orders = orders ?: emptyList())
                             }
                         }
                     }
