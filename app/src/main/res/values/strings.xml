@@ -12,4 +12,5 @@
     <string name="shipped_instant">Livraison instantané</string>
     <string name="phone_number">Numero de telephone</string>
     <string name="university">Université</string>
+    <string name="add_recipes_content_description">ajouter un repas</string>
 </resources>

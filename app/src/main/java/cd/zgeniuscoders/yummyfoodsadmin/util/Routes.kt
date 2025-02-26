@@ -16,4 +16,12 @@ sealed interface Routes {
 
     @Serializable
     data object RecipePage: Routes
+
+    @Serializable
+    data object AddRecipePage: Routes
+
+    @Serializable
+    data class EditRecipePage(
+        val recipeId: String
+    ): Routes
 }

@@ -6,6 +6,7 @@ import cd.zgeniuscoders.yummyfoodsadmin.orders.data.repository.OrderRepositoryIm
 import cd.zgeniuscoders.yummyfoodsadmin.orders.domain.repository.CustomerRepository
 import cd.zgeniuscoders.yummyfoodsadmin.orders.domain.repository.OrderRepository
 import cd.zgeniuscoders.yummyfoodsadmin.orders.domain.repository.RecipeRepository
+import cd.zgeniuscoders.yummyfoodsadmin.orders.presentation.add_recipe.AddRecipeViewModel
 import cd.zgeniuscoders.yummyfoodsadmin.orders.presentation.all_recipes.AllRecipePage
 import cd.zgeniuscoders.yummyfoodsadmin.orders.presentation.all_recipes.AllRecipeViewModel
 import cd.zgeniuscoders.yummyfoodsadmin.orders.presentation.home.HomeViewModel
@@ -41,4 +42,5 @@ val foodModule = module {
 
     viewModelOf(::HomeViewModel)
     viewModelOf(::AllRecipeViewModel)
+    viewModelOf(::AddRecipeViewModel)
 }

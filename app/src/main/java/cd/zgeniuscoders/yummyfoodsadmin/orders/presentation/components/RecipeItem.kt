@@ -31,9 +31,7 @@ fun RecipeItem(
     onUpdate: (id: String) -> Unit,
 ) {
 
-    Card(
-        modifier = Modifier.padding(10.dp)
-    ) {
+    Card{
 
         Row(
             modifier = Modifier
