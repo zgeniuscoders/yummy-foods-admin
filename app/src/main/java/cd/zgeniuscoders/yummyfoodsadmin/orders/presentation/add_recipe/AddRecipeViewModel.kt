@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cd.zgeniuscoders.yummyfoodsadmin.orders.domain.models.Recipe
 import cd.zgeniuscoders.yummyfoodsadmin.orders.domain.repository.RecipeRepository
+import cd.zgeniuscoders.yummyfoodsadmin.orders.domain.services.ValidationServices
 import cd.zgeniuscoders.yummyfoodsadmin.util.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -15,7 +16,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AddRecipeViewModel(
-    private val recipeRepository: RecipeRepository
+    private val recipeRepository: RecipeRepository,
+    private val validation: ValidationServices
 ) : ViewModel() {
 
     private var _state = MutableStateFlow(AddRecipeState())
@@ -39,7 +41,33 @@ class AddRecipeViewModel(
     }
 
     private fun validated(): Boolean {
-        return false;
+
+        val validateNameResult = validation.require(state.value.name, "Name")
+        val validateDescriptionResult = validation.require(state.value.description, "Description")
+        val validationPhotoUrlResult = validation.url(state.value.recipePhoto, "Photo")
+        val validationCategoryResult = validation.require(state.value.category, "Category")
+        val validationNumberResult = validation.number(state.value.price, "Price")
+
+        val hasError = listOf(
+            validateNameResult,
+            validateDescriptionResult,
+            validationCategoryResult,
+            validationNumberResult
+        ).any { !it.isSuccess }
+
+        if (hasError) {
+
+            _state.update {
+                it.copy(
+                    nameError = validateNameResult.error,
+                    descriptionError = validateDescriptionResult.error,
+                    categoryError = validationCategoryResult.error,
+                    priceError = validationNumberResult.error
+                )
+            }
+        }
+
+        return !hasError;
     }
 
     private fun addRecipe() {

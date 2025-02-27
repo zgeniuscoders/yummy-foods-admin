@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -60,12 +61,14 @@ fun AddRecipePageBody(
             value = state.name,
             label = "Nom de la rectte",
             placeholder = "Chawarma",
+            errorMessage = state.nameError,
             onValueChange = {
                 onEvent(AddRecipeEvent.OnNameChange(it))
             }
         ),
         AddRecipeField(
             value = state.description,
+            errorMessage = state.descriptionError,
             label = "Description de la rectte",
             placeholder = "Description",
             onValueChange = {
@@ -74,19 +77,31 @@ fun AddRecipePageBody(
         ),
         AddRecipeField(
             value = state.category,
+            errorMessage = state.categoryError,
             label = "Categorie de la rectte",
             placeholder = "Boissons",
             onValueChange = {
-                onEvent(AddRecipeEvent.OnDescriptionChange(it))
+                onEvent(AddRecipeEvent.OnCategoryChange(it))
             }
         ),
         AddRecipeField(
+            errorMessage = state.priceError,
             value = state.price,
             label = "Prix de la rectte",
             placeholder = "12000",
             keyboardType = KeyboardType.Number,
             onValueChange = {
                 onEvent(AddRecipeEvent.OnPriceChange(it))
+            }
+        ),
+        AddRecipeField(
+            errorMessage = state.recipePhotoError,
+            value = state.recipePhoto,
+            label = "Image de la recette",
+            placeholder = "12000",
+            keyboardType = KeyboardType.Uri,
+            onValueChange = {
+                onEvent(AddRecipeEvent.OnPhotoUrlChange(it))
             }
         )
     )
@@ -107,6 +122,7 @@ fun AddRecipePageBody(
                     TextField(
                         modifier = Modifier.fillMaxWidth(),
                         value = item.value,
+                        isError = item.errorMessage != null,
                         label = {
                             Text(item.label)
                         },
@@ -117,6 +133,12 @@ fun AddRecipePageBody(
                             item.onValueChange(it)
                         }
                     )
+                    if (item.errorMessage != null) {
+                        Text(
+                            item.errorMessage,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
                 }
                 item {
                     Button(
@@ -139,5 +161,6 @@ data class AddRecipeField(
     val onValueChange: (value: String) -> Unit,
     val label: String,
     val placeholder: String,
+    val errorMessage: String? = null,
     val keyboardType: KeyboardType = KeyboardType.Text
 )
